@@ -1,6 +1,5 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/13.txt";
 
 fn clean_and_parse_i32(inp: &str) -> i32 {
     inp.chars()
@@ -51,22 +50,40 @@ fn perfect_delay(firewall: &Vec<(i32, Sweep)>) -> i32 {
     0
 }
 
-fn main() {
-    let path = Path::new("input/13.txt");
-    //let path = Path::new("input/13-test.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut s = String::new();
+fn make_firewall(input: String) -> Vec<(i32, Sweep)> {
     let mut firewall: Vec<(i32, Sweep)> = Vec::new();
-    file.read_to_string(&mut s).unwrap();
 
-    for line in s.lines() {
+    for line in input.lines() {
         let mut it = line.split_whitespace();
         let idx = clean_and_parse_i32(it.next().unwrap());
         let depth = clean_and_parse_i32(it.next().unwrap());
         firewall.push((idx, Sweep::new(depth)));
     }
+    return firewall;
+}
 
+fn main() {
     println!("{}", String::from("2017 AOC #13"));
-    println!("Part One: {:?}", get_severity(&firewall, 0));
-    println!("Part Two: {:?}", perfect_delay(&firewall));
+    println!(
+        "Part One: {:?}",
+        get_severity(&make_firewall(input::get(PATH)), 0)
+    );
+    println!(
+        "Part Two: {:?}",
+        perfect_delay(&make_firewall(input::get(PATH)))
+    );
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(get_severity(&make_firewall(input::get(PATH)), 0), 1632);
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(perfect_delay(&make_firewall(input::get(PATH))), 3834136);
+    }
 }

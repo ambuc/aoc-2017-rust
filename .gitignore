@@ -11,3 +11,10 @@ Cargo.lock
 
 *
 !*.*
+!input/
+*.swp
+*.rustfmt
+
+/target/
+**/*.rs.bk
+Cargo.lock

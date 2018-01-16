@@ -1,6 +1,5 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/09.txt";
 
 fn evaluate(input: &str) -> (u32, u32) {
     let mut total: u32 = 0;
@@ -41,21 +40,23 @@ fn evaluate(input: &str) -> (u32, u32) {
 
 #[cfg(not(test))]
 fn main() {
-    let path = Path::new("input/09.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut file_string = String::new();
-    file.read_to_string(&mut file_string)
-        .expect("unable to read the file");
     println!("{}", String::from("2017 AOC #9"));
-    let (total, garbage_count) = evaluate(&file_string);
-    println!("Part One: {:?}", total);
-    println!("Part Two: {:?}", garbage_count);
+    println!("Part One: {:?}", evaluate(&input::get(PATH)).0);
+    println!("Part Two: {:?}", evaluate(&input::get(PATH)).1);
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
 
+    #[test]
+    fn test_one() {
+        assert_eq!(evaluate(&input::get(PATH)).0, 17537);
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(evaluate(&input::get(PATH)).1, 7539);
+    }
     #[test]
     fn test_one_group() {
         let one_group = String::from("{}");

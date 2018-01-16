@@ -36,3 +36,17 @@ fn main() {
     println!("Part One: {:?}", spinlock(382, 2017, 2017));
     println!("Part Two: {:?}", spinlock_lite(382, 50000000));
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(spinlock(382, 2017, 2017), 1561);
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(spinlock_lite(382, 50000000), 33454823);
+    }
+}

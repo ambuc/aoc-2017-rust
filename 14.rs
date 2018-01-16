@@ -96,18 +96,45 @@ fn hash_to_vecbool(h: String) -> Vec<bool> {
     vec
 }
 
-fn main() {
-    //let input: String = String::from("flqrgnkx"); //test
-    let input: String = String::from("stpzcrnm"); //real
-
+fn make_grid(input: &String) -> Grid {
     let mut g: Grid = Grid { grid: Vec::new() };
     for i in 0..128 {
         let rowstring: String = input.clone() + &String::from("-") + &i.to_string();
         g.grid
             .push(hash_to_vecbool(knot_hash::knot_hash(rowstring)));
     }
+    return g;
+}
 
+fn main() {
     println!("{}", String::from("2017 AOC #14"));
-    println!("Part One: {}", g.num_zeroes());
-    println!("Part Two: {}", g.to_graph().num_regions());
+    println!(
+        "Part One: {}",
+        make_grid(&String::from("stpzcrnm")).num_zeroes()
+    );
+    println!(
+        "Part Two: {}",
+        make_grid(&String::from("stpzcrnm"))
+            .to_graph()
+            .num_regions()
+    );
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(make_grid(&String::from("stpzcrnm")).num_zeroes(), 8250)
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(
+            make_grid(&String::from("stpzcrnm"))
+                .to_graph()
+                .num_regions(),
+            1113
+        );
+    }
 }

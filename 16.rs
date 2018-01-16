@@ -1,6 +1,5 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/16.txt";
 use std::str;
 
 //    a    b    c    d    e    f    g    h
@@ -73,22 +72,36 @@ fn cycle_length(steps: &Vec<&str>) -> u32 {
     return 0;
 }
 
-fn main() {
-    let path = Path::new("input/16.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut file_str = String::new();
-    file.read_to_string(&mut file_str).unwrap();
-    let steps: Vec<&str> = file_str.lines().next().unwrap().split(',').collect();
-
-    println!("{}", String::from("2017 AOC #16"));
+fn solve() -> (String, String) {
+    let input = input::get(PATH);
+    let steps: Vec<&str> = input.lines().next().unwrap().split(',').collect();
 
     let mut state_one: St = St::new();
     state_one.dance(&steps);
-    println!("Part One: {:?}", state_one.print());
 
     let mut state_two: St = St::new();
     for _ in 0..(1000000000 % cycle_length(&steps)) {
         state_two.dance(&steps);
     }
-    println!("Part Two: {:?}", state_two.print());
+    return (state_one.print(), state_two.print());
+}
+
+fn main() {
+    println!("{}", String::from("2017 AOC #16"));
+    println!("Part One: {:?}", solve().0);
+    println!("Part Two: {:?}", solve().1);
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(solve().0, "bijankplfgmeodhc");
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(solve().1, "bpjahknliomefdgc");
+    }
 }

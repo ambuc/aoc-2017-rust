@@ -1,43 +1,56 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
 use std::collections::HashSet;
 
-fn main() {
-    let path = Path::new("input/04.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut s = String::new();
-    let mut num_valid_a: i32 = 0;
-    file.read_to_string(&mut s).unwrap();
-    'lineloop_a: for line in s.lines() {
+mod input;
+static PATH: &'static str = "input/04.txt";
+
+fn valid_a(list: String) -> i32 {
+    let mut count = 0;
+    'lineloop: for line in list.lines() {
         let mut set_a = HashSet::new();
         for word in line.split_whitespace() {
             if set_a.contains(word) {
-                continue 'lineloop_a;
+                continue 'lineloop;
             } else {
                 set_a.insert(word);
             }
         }
-        num_valid_a += 1;
+        count += 1;
     }
-
-    println!("{}", String::from("2017 AOC #4"));
-    println!("Part One: {}", num_valid_a);
-
-    let mut num_valid_b: i32 = 0;
-    'lineloop_b: for line in s.lines() {
+    return count;
+}
+fn valid_b(list: String) -> i32 {
+    let mut count: i32 = 0;
+    'lineloop: for line in list.lines() {
         let mut set_b = HashSet::new();
         for word in line.split_whitespace() {
             let mut tmp: Vec<char> = word.chars().collect();
             tmp.sort();
             if set_b.contains(&tmp) {
-                continue 'lineloop_b;
+                continue 'lineloop;
             } else {
                 set_b.insert(tmp);
             }
         }
-        num_valid_b += 1;
+        count += 1;
     }
+    return count;
+}
 
-    println!("Part Two: {}", num_valid_b);
+fn main() {
+    println!("{}", String::from("2017 AOC #4"));
+    println!("Part One: {}", valid_a(input::get(PATH)));
+    println!("Part Two: {}", valid_b(input::get(PATH)));
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_one() {
+        assert_eq!(valid_a(input::get(PATH)), 383);
+    }
+    #[test]
+    fn part_two() {
+        assert_eq!(valid_b(input::get(PATH)), 265);
+    }
 }

@@ -58,10 +58,6 @@ fn tally_after(gen_a: &mut Gen, gen_b: &mut Gen, limit: u64) -> u64 {
 fn main() {
     println!("{}", String::from("2017 AOC #15"));
 
-    //test values
-    //let mut gen_a: Gen = Gen::new(65, 16807);
-    //let mut gen_b: Gen = Gen::new(8921, 48271);
-
     println!(
         "Part One: {}",
         tally_after(
@@ -79,4 +75,32 @@ fn main() {
             5000000
         )
     );
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(
+            tally_after(
+                &mut Gen::new(703, 16807),
+                &mut Gen::new(516, 48271),
+                40000000
+            ),
+            594
+        );
+    }
+    #[test]
+    fn test_two() {
+        assert_eq!(
+            tally_after(
+                &mut Gen::new_filtered(703, 16807, 4),
+                &mut Gen::new_filtered(516, 48271, 8),
+                5000000
+            ),
+            328
+        );
+    }
 }

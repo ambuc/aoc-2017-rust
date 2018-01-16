@@ -1,20 +1,14 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/08.txt";
+
 use std::collections::HashMap;
 use std::cmp;
 
-fn main() {
-    //let path = Path::new("input/08-test.txt");
-    let path = Path::new("input/08.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut file_string = String::new();
-    file.read_to_string(&mut file_string)
-        .expect("unable to read the file");
-
+fn solve() -> (i32, i32) {
+    let input = input::get(PATH);
     let mut register: HashMap<&str, i32> = HashMap::new();
     let mut global_max: i32 = 0;
-    for line in file_string.lines() {
+    for line in input.lines() {
         let mut iter: std::str::SplitWhitespace = line.split_whitespace();
         let name: &str = iter.next().unwrap();
         let verb: &str = iter.next().unwrap();
@@ -46,8 +40,24 @@ fn main() {
         let local_max: i32 = *register.values().max().unwrap();
         global_max = cmp::max(global_max, local_max);
     }
+    return (*register.values().max().unwrap(), global_max);
+}
 
+fn main() {
     println!("{}", String::from("2017 AOC #8"));
-    println!("Part One: {:?}", register.values().max().unwrap());
-    println!("Part Two: {:?}", global_max);
+    println!("Part One: {:?}", solve().0);
+    println!("Part Two: {:?}", solve().1);
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_one() {
+        assert_eq!(solve().0, 4877)
+    }
+    #[test]
+    fn part_two() {
+        assert_eq!(solve().1, 5471)
+    }
 }

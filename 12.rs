@@ -1,6 +1,6 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/12.txt";
+
 use std::collections::HashSet;
 
 fn clean_and_parse_u32(inp: &str) -> u32 {
@@ -83,14 +83,24 @@ impl Graph {
 }
 
 fn main() {
-    let path = Path::new("input/12.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut s = String::new();
-    file.read_to_string(&mut s).unwrap();
-
-    let graph: Graph = Graph::new(s);
+    let graph: Graph = Graph::new(input::get(PATH));
 
     println!("{}", String::from("2017 AOC #12"));
     println!("Part One: {:?}", graph.component_with(0).len());
     println!("Part Two: {:?}", graph.components().len());
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(Graph::new(input::get(PATH)).component_with(0).len(), 288);
+    }
+
+    #[test]
+    fn test_two() {
+        assert_eq!(Graph::new(input::get(PATH)).components().len(), 211);
+    }
 }

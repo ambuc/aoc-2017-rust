@@ -20,7 +20,7 @@ fn redistribute(bank: &mut Vec<i32>) {
     }
 }
 
-fn main() {
+fn solve() -> (i32, i32) {
     let mut bank: Vec<i32> = vec![10, 3, 15, 10, 5, 15, 5, 15, 9, 2, 5, 8, 5, 2, 3, 6];
     let mut history: HashSet<Vec<i32>> = HashSet::new();
     let mut sequence: HashMap<Vec<i32>, i32> = HashMap::new();
@@ -36,8 +36,24 @@ fn main() {
         redistribute(&mut bank);
     }
 
-    println!("{}", String::from("2017 AOC #6"));
-    println!("Part One: {}", num_steps);
     let cycle_length = num_steps - sequence.get(&bank).unwrap();
-    println!("Part Two: {}", cycle_length);
+    return (num_steps, cycle_length);
+}
+fn main() {
+    println!("{}", String::from("2017 AOC #6"));
+    println!("Part One: {}", solve().0);
+    println!("Part Two: {}", solve().1);
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_one() {
+        assert_eq!(solve().0, 14029);
+    }
+    #[test]
+    fn part_two() {
+        assert_eq!(solve().1, 2765);
+    }
 }

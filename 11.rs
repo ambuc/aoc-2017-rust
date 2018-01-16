@@ -1,6 +1,6 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/11.txt";
+
 use std::cmp;
 
 //   n       -z
@@ -23,7 +23,7 @@ fn distance_btw(a: &Coord, b: &Coord) -> i32 {
     return *v.iter().max().unwrap() as i32;
 }
 
-fn to_coord(steps: &str) -> Coord {
+fn to_coord(steps: &str) -> (Coord, i32) {
     let mut max_distance: i32 = 0;
     let mut c: Coord = Coord { x: 0, y: 0, z: 0 };
     let steps_vec: Vec<&str> = steps.split(',').collect();
@@ -57,48 +57,66 @@ fn to_coord(steps: &str) -> Coord {
         }
         max_distance = cmp::max(max_distance, distance_btw(&origin(), &c));
     }
-    println!("global max: {}", max_distance);
-    return c;
+    return (c, max_distance);
 }
 
 fn main() {
-    let path = Path::new("input/11.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut s = String::new();
-    file.read_to_string(&mut s).unwrap();
-    let input = s.lines().next().unwrap();
     println!("{}", String::from("2017 AOC #11"));
-    println!("Part One: {:?}", distance_btw(&origin(), &to_coord(&input)));
+    println!(
+        "Part One: {:?}",
+        distance_btw(
+            &origin(),
+            &to_coord(&input::get(PATH).lines().next().unwrap()).0
+        )
+    );
+    println!(
+        "Part Two: {:?}",
+        &to_coord(&input::get(PATH).lines().next().unwrap()).1
+    );
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
     #[test]
+    fn test_part_one() {
+        assert_eq!(
+            distance_btw(
+                &origin(),
+                &to_coord(&input::get(PATH).lines().next().unwrap()).0
+            ),
+            764
+        )
+    }
+    #[test]
+    fn test_part_two() {
+        assert_eq!(to_coord(&input::get(PATH).lines().next().unwrap()).1, 1532)
+    }
+    #[test]
     fn test_one() {
         let one = String::from("ne,ne,ne");
-        assert_eq!(distance_btw(&origin(), &to_coord(&one)), 3);
+        assert_eq!(distance_btw(&origin(), &to_coord(&one).0), 3);
     }
     #[test]
     fn test_two() {
         let two = String::from("ne,ne,sw,sw");
-        assert_eq!(distance_btw(&origin(), &to_coord(&two)), 0);
+        assert_eq!(distance_btw(&origin(), &to_coord(&two).0), 0);
     }
     #[test]
     fn test_three() {
         let three = String::from("ne,ne,s,s");
-        assert_eq!(distance_btw(&origin(), &to_coord(&three)), 2);
+        assert_eq!(distance_btw(&origin(), &to_coord(&three).0), 2);
     }
     #[test]
     fn test_four() {
         let four = String::from("se,sw,se,sw,sw");
-        assert_eq!(distance_btw(&origin(), &to_coord(&four)), 3);
+        assert_eq!(distance_btw(&origin(), &to_coord(&four).0), 3);
     }
 
     #[test]
     fn test_five() {
         let five = String::from("se,se,se,s,s");
-        assert_eq!(distance_btw(&origin(), &to_coord(&five)), 5);
+        assert_eq!(distance_btw(&origin(), &to_coord(&five).0), 5);
     }
 
 }

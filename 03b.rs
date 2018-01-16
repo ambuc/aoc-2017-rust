@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+static INPUT: i32 = 361527;
 
 fn rotate_vec(v: (i32, i32)) -> (i32, i32) {
     match v {
@@ -29,9 +30,8 @@ fn get_neighbors(xy: (i32, i32)) -> [(i32, i32); 8] {
     ];
 }
 
-fn main() {
+fn perform_spiral_insert(input: i32) -> i32 {
     let mut spiral = HashMap::new();
-    let input: i32 = 361527;
     let mut cur_pos: (i32, i32) = (0, 0);
     let mut fwd_vec: (i32, i32) = (1, 0);
     let mut left_vec: (i32, i32) = (0, 1);
@@ -56,7 +56,19 @@ fn main() {
         spiral.insert(cur_pos, tmp_sum);
         last = tmp_sum;
     }
+    return last;
+}
 
+fn main() {
     println!("{}", String::from("2017 AOC #3b"));
-    println!("Part Two: {}", last);
+    println!("Part Two: {}", perform_spiral_insert(INPUT));
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_two() {
+        assert_eq!(363010, perform_spiral_insert(INPUT));
+    }
 }

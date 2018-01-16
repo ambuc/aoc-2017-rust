@@ -1,6 +1,5 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
+mod input;
+static PATH: &'static str = "input/18.txt";
 use std::collections::HashMap;
 
 fn process(file_str: String) -> i64 {
@@ -69,14 +68,20 @@ fn process(file_str: String) -> i64 {
 }
 
 fn main() {
-    let path = Path::new("input/18.txt");
-    //let path = Path::new("input/18-test.txt");
-    let mut file_str: String = String::new();
-    File::open(&path)
-        .unwrap()
-        .read_to_string(&mut file_str)
-        .unwrap();
-
     println!("{}", String::from("2017 AOC #16"));
-    println!("Part One: {:?}", process(file_str));
+    println!("Part One: {:?}", process(input::get(PATH)));
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_one() {
+        assert_eq!(process(input::get(PATH)), 3423);
+    }
+    // #[test]
+    // fn test_two() {
+    //     assert_eq!(0, 0);
+    // }
 }

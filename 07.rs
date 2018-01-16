@@ -1,8 +1,8 @@
-use std::fs::File;
-use std::io::prelude::*;
-use std::path::Path;
 use std::collections::HashSet;
 use std::collections::HashMap;
+
+mod input;
+static PATH: &'static str = "input/07.txt";
 
 struct Graph<'a> {
     asc_list: Vec<(&'a str, &'a str)>, //Vec::new();
@@ -61,7 +61,7 @@ impl<'a> Graph<'a> {
         for kid in &self.kids_of(node) {
             list.push((kid, self.mass_above_inclusive(kid)));
         }
-        println!("{} -> {:?}", node, list);
+        println!("{:?}", list);
         match try_find_key_for_uniq_val(list) {
             Some(subnode) => return self.find_error_within_subtree_at(subnode),
             None => return 0,
@@ -88,20 +88,14 @@ fn try_find_key_for_uniq_val(list: Vec<(&str, u32)>) -> Option<&str> {
     return None;
 }
 
-fn main() {
-    let path = Path::new("input/07.txt");
-    //let path = Path::new("input/07-test.txt");
-    let mut file = File::open(&path).unwrap();
-    let mut s = String::new();
+fn make_graph_from<'a>(input: &'a String) -> Graph<'a> {
     let mut graph: Graph = Graph {
         asc_list: Vec::new(),
         masses: HashMap::new(),
         root_node: None,
     };
 
-    file.read_to_string(&mut s).unwrap();
-
-    for line in s.lines() {
+    for line in input.lines() {
         let mut it = line.split_whitespace();
         let node: &str = it.next().unwrap();
         let mut mass_str: &str = it.next().unwrap();
@@ -122,9 +116,16 @@ fn main() {
         }
     }
 
+    return graph;
+}
+
+fn main() {
     println!("{}", String::from("2017 AOC #4"));
+    let input = input::get(PATH);
+    let mut graph = make_graph_from(&input);
     graph.find_root_node();
-    println!("Part One: {:?}", graph.root_node());
-    println!("Part Two: {:?}", graph.find_error());
-    // expecting 596
+    let root = graph.root_node();
+    let error = graph.find_error();
+    println!("Part One: {:?}", root);
+    println!("Part Two: {:?}", error);
 }

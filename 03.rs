@@ -1,4 +1,5 @@
 use std::cmp;
+static INPUT: i32 = 361527;
 
 // accepts a ring number and returns the wing value on that ring
 fn east_wing(n: i32) -> i32 {
@@ -30,13 +31,19 @@ fn distance_to_origin(n: i32) -> i32 {
 }
 
 fn main() {
-    assert_eq!(0, distance_to_origin(1));
-    assert_eq!(3, distance_to_origin(12));
-    assert_eq!(2, distance_to_origin(23));
-    assert_eq!(31, distance_to_origin(1024));
-
-    let val1 = distance_to_origin(361527);
-
     println!("{}", String::from("2017 AOC #3"));
-    println!("Part One: {}", val1);
+    println!("Part One: {}", distance_to_origin(INPUT));
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    #[test]
+    fn part_one() {
+        assert_eq!(0, distance_to_origin(1));
+        assert_eq!(3, distance_to_origin(12));
+        assert_eq!(2, distance_to_origin(23));
+        assert_eq!(31, distance_to_origin(1024));
+        assert_eq!(326, distance_to_origin(INPUT));
+    }
 }
